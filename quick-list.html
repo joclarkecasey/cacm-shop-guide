@@ -49,6 +49,8 @@ input[type=checkbox]{width:20px;height:20px;accent-color:var(--accent);flex:none
 .grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
 @media (max-width:32rem){.grid.four{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .full{grid-column:1/-1}
+.grid.mat{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
+@media (max-width:32rem){.grid.mat{grid-template-columns:1fr}}
 .half{grid-column:span 2}
 @media (max-width:22rem){.half{grid-column:1/-1}}
 .hint{font-size:13px;color:var(--muted);font-weight:400}
@@ -186,14 +188,16 @@ function render(){
     <div ${g?"hidden":""} style="display:grid;gap:14px">
       <label>Description${r}<textarea id="desc-${i}" data-f="desc">${esc(p.desc)}</textarea><span class="hint">2 to 4 sentences: what it is, how you made it, what makes it special. A blank line starts a new paragraph.</span></label>
       <div class="grid four">
-        <label>Height (in)<input data-f="h" inputmode="decimal" value="${esc(p.h)}"></label>
-        <label>Width (in)<input data-f="w" inputmode="decimal" value="${esc(p.w)}"></label>
-        <label>Depth (in)<input data-f="d" inputmode="decimal" value="${esc(p.d)}"></label>
+        <label>Height (in)${r}<input id="h-${i}" data-f="h" inputmode="decimal" value="${esc(p.h)}"></label>
+        <label>Width (in)${r}<input id="w-${i}" data-f="w" inputmode="decimal" value="${esc(p.w)}"></label>
+        <label>Depth (in)${r}<input id="d-${i}" data-f="d" inputmode="decimal" value="${esc(p.d)}"></label>
         ${p.multi ? "" : `<label>Weight (lb)<input data-f="weight" inputmode="decimal" value="${esc(p.weight)}"></label>`}
       </div>
-      <div class="grid">
-        <label>Materials<input data-f="materials" value="${esc(p.materials)}" placeholder="Clay body first, then glaze"></label>
+      <div class="grid mat">
+        <label>Materials${r}<input id="materials-${i}" data-f="materials" value="${esc(p.materials)}" placeholder="Clay body first, then glaze, e.g. Stoneware, blue glaze"></label>
         <label>Firing type${r}<select id="firing-${i}" data-f="firing">${opts(CONFIG.firing,p.firing,"Choose…")}</select></label>
+      </div>
+      <div class="grid">
         <label class="full">Care${r}<input id="care-${i}" data-f="care" value="${esc(p.care)}" placeholder="e.g. Food safe, hand wash"></label>
         <label class="half">Availability${r}<select id="avail-${i}" data-f="avail">${opts(CONFIG.availability,p.avail,"Choose…")}</select><span class="hint">Where the piece is now.</span></label>
         <label class="half">Pickup &amp; shipping${r}<select id="pickup-${i}" data-f="pickup">${opts(CONFIG.pickup,p.pickup,"Choose…")}</select></label>
@@ -274,6 +278,8 @@ function validate(){
     } else if(!num(p.price)) mark(el("price"));
     {
       if(!(p.desc||"").trim()) mark(el("desc"));
+      ["h","w","d"].forEach(k => { if(!num(p[k])) mark(el(k)); });
+      if(!(p.materials||"").trim()) mark(el("materials"));
       if(!p.firing) mark(el("firing"));
       if(!(p.care||"").trim()) mark(el("care"));
       if(!p.avail) mark(el("avail"));
@@ -321,7 +327,9 @@ function buildCSV(){
 $("#download").addEventListener("click", () => {
   if(!validate()) return;
   const csv = buildCSV();
-  const name = "shop-upload-" + (slug(vendorName()) || "artist") + ".csv";
+  const now = new Date(), pad = n => String(n).padStart(2,"0");
+  const stamp = now.getFullYear() + "-" + pad(now.getMonth()+1) + "-" + pad(now.getDate());
+  const name = "shop-upload-" + (slug(vendorName()) || "artist") + "-" + stamp + ".csv";
   const url = URL.createObjectURL(new Blob([csv], {type:"text/csv;charset=utf-8"}));
   const a = document.createElement("a"); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 2000);
