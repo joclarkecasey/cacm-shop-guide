@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>CACM Quick List</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* One narrow working column: who you are, a stack of piece cards, then a sticky download bar. Matches the CACM Shop Guide. */
+:root{
+  --bg:#F6F3F0; --surface:#FFFFFF; --fg:#2A2420; --muted:#6B615A; --line:#E6DED7; --field:#FBF9F7;
+  --accent:#B6502F; --accent-ink:#FFFFFF; --soft:#F6E2DA; --err:#A3261B;
+  --display:"Fraunces", Georgia, serif; --body:"Source Sans 3", "Helvetica Neue", Arial, sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#1C1917; --surface:#262220; --fg:#F1ECE7; --muted:#B4AAA2; --line:#3A3330; --field:#211D1B;
+  --accent:#E07A55; --accent-ink:#1C1917; --soft:#3A2A23; --err:#F08A7E; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#1C1917; --surface:#262220; --fg:#F1ECE7; --muted:#B4AAA2; --line:#3A3330; --field:#211D1B;
+  --accent:#E07A55; --accent-ink:#1C1917; --soft:#3A2A23; --err:#F08A7E; color-scheme:dark }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.5 var(--body)}
+.wrap{max-width:48rem;margin:0 auto;padding:32px max(16px,env(safe-area-inset-right,0px)) 140px max(16px,env(safe-area-inset-left,0px));display:grid;gap:22px}
+h1{font:600 clamp(2rem,5vw,2.6rem)/1.1 var(--display);margin:0;text-wrap:balance}
+h2{font:600 1.3rem/1.25 var(--display);margin:0}
+p{margin:0}
+a{color:var(--accent)}
+.eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.lede{color:var(--muted);max-width:62ch}
+.steps{display:grid;gap:6px;padding:0;margin:0;list-style:none;counter-reset:s}
+.steps li{counter-increment:s;position:relative;padding-left:36px;min-height:26px}
+.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:26px;height:26px;border-radius:50%;background:var(--soft);color:var(--accent);font-weight:700;display:grid;place-items:center;font-size:14px}
+.note{background:var(--soft);border-radius:10px;padding:12px 14px;font-size:15px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:14px}
+label{display:block;font-size:14px;font-weight:600;color:var(--muted);min-width:0}
+label>input,label>select,label>textarea{display:block;margin-top:4px}
+label>.hint{display:block;margin-top:4px}
+.req{color:var(--accent)}
+input,select,textarea{font:inherit;font-size:16px;color:var(--fg);background:var(--field);border:1px solid var(--line);border-radius:8px;padding:9px 10px;width:100%;min-width:0}
+textarea{resize:vertical;min-height:4.5em}
+input:focus,select:focus,textarea:focus,button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+input[type=checkbox]{width:20px;height:20px;accent-color:var(--accent);flex:none;margin:0}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:15px;font-weight:600;color:var(--fg)}
+.check>span{display:grid;gap:2px}
+.check .hint{display:block}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(10rem,1fr));align-items:start}
+.grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:32rem){.grid.four{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.full{grid-column:1/-1}
+.half{grid-column:span 2}
+@media (max-width:22rem){.half{grid-column:1/-1}}
+.hint{font-size:13px;color:var(--muted);font-weight:400}
+.piece-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.piece-head h2{flex:1 1 12rem;min-width:0;overflow-wrap:anywhere}
+.num{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.chip{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;background:var(--soft);color:var(--accent);padding:3px 8px;border-radius:99px}
+button{font:inherit;font-weight:700;cursor:pointer;border-radius:8px;padding:9px 14px;border:1px solid var(--line);background:var(--surface);color:var(--fg)}
+button.ghost{border-color:transparent;background:transparent;color:var(--muted);padding:6px 8px;font-size:15px}
+button.ghost:hover{color:var(--fg)}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.add{justify-self:start}
+.designs{display:grid;gap:10px;border-top:1px solid var(--line);padding-top:12px}
+.design{display:grid;grid-template-columns:minmax(0,2fr) repeat(3,minmax(0,1fr)) auto;gap:8px;align-items:end}
+@media (max-width:32rem){.design{grid-template-columns:repeat(3,minmax(0,1fr))}.design .dname{grid-column:1/-1}.design button{grid-column:1/-1;justify-self:start}}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px))}
+.bar-in{max-width:48rem;margin:0 auto;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.status{flex:1;min-width:12rem;font-size:15px;color:var(--muted)}
+.status.err{color:var(--err)}
+.bad{border-color:var(--err)!important;box-shadow:0 0 0 1px var(--err)}
+details summary{cursor:pointer;font-weight:700;color:var(--fg)}
+details ol{margin:.6em 0 0;padding-left:1.2em;display:grid;gap:6px;color:var(--muted)}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header style="display:grid;gap:12px">
+    <span class="eyebrow">CACM Gallery &amp; Boutique</span>
+    <h1>Add several pieces at once</h1>
+    <p class="lede">Handy when you have a batch of new work. Fill in your pieces here, download one file, and upload it in your Puppet Vendors account. Your pieces arrive as drafts, ready for photos. For one or two pieces, <b>Create Product</b> in your account is quicker.</p>
+    <ol class="steps">
+      <li>Choose your name and fill in your pieces.</li>
+      <li>Click <b>Download upload file</b> at the bottom.</li>
+      <li>In your account, go to <b>Products → Import</b> and upload the file.</li>
+      <li>Open each draft, add photos, set it to <b>Active</b> and click <b>Submit</b>.</li>
+    </ol>
+    <p class="hint">Not sure which options to pick? See the <a href="guide.html#where">Shop Guide</a>. Your list is saved on this device until you clear it.</p>
+  </header>
+
+  <section class="panel">
+    <label for="vendor">Your name <span class="req">*</span>
+      <select id="vendor"></select>
+    </label>
+    <label for="vendorOther" id="otherWrap" hidden>Your name, exactly as it appears in your account <span class="req">*</span>
+      <input id="vendorOther" autocomplete="name">
+    </label>
+  </section>
+
+  <div id="pieces" style="display:grid;gap:16px"></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <button class="add" id="add" type="button">+ Add another piece</button>
+    <button class="ghost" id="clear" type="button">Clear my list</button>
+  </div>
+
+  <details class="panel">
+    <summary>How to upload the file</summary>
+    <ol>
+      <li>Log in to your Puppet Vendors account and open <b>Products</b>.</li>
+      <li>Click <b>Import</b>, choose the file you downloaded, and upload it.</li>
+      <li>If any rows are marked in red, hover over the red box to see why, fix it here, and download again.</li>
+      <li>Your pieces appear in Products as drafts. Open each one, add photos, set it to <b>Active</b>, and click <b>Submit</b> at the bottom.</li>
+    </ol>
+  </details>
+</div>
+
+<div class="bar"><div class="bar-in">
+  <span class="status" id="status" aria-live="polite"></span>
+  <button class="primary" id="download" type="button">Download upload file</button>
+</div></div>
+
+<script>
+/* ---- Settings: change these lists to match the store ---- */
+const CONFIG = {
+  artists: ["Amanda Mitts","Becky Ordin","Carole C Nelson","Christelle Blumin","Claire Dougherty","Debra Sartell","Ellie Rossiter","Emeigh Poindexter","Gail Miller","Geraldine Ganun","Heather Austin-Weir","Jenny Kolcun","Jo Clarke","Nadia Tarzi-Saccardi","Nicolas Vasquez","Rebecca Wallerstein","Susan Press","Thomas Stocking","Tony Saccardi"],
+  types: ["Decorative","Functional","Sculptural","Jewelery"],
+  firing: ["Low fire","Mid fire","High fire","Pit fire"],
+  availability: ["On display in Gallery Boutique","Online only"],
+  pickup: ["Gallery pickup only","Gallery pickup or shipping on request"],
+  location: "Inventory Location: BOUTIQUE"
+};
+const HEADERS = ["_id","Handle","Title","Description","Vendor","Type","Digital Product","Published","Option1 Name","Option1 Value","Option2 Name","Option2 Value","Option3 Name","Option3 Value","Variant SKU","Variant Weight","Variant Weight Unit","Variant Inventory Policy","Variant Fulfillment Service","Variant Price","Variant Compare At Price","Variant Requires Shipping","Variant Taxable","Variant Barcode","Variant Tax Code","Image Position","Gift Card","Tags","Image Src","Image Alt Text","Cost Per Item","Track Quantity",CONFIG.location,"Metafield: custom.dimensions.value","Metafield: custom.dimensions.unit","Metafield: custom.width.value","Metafield: custom.width.unit","Metafield: custom.depth.value","Metafield: custom.depth.unit","Metafield: custom.materials","Metafield: custom.firing_type","Metafield: custom.care","Metafield: custom.fullfillment","Metafield: custom.availability"];
+const OTHER = "__other";
+
+const EXAMPLE = {example:true,title:"Speckled moon mug",price:"48",qty:"1",type:"Functional",desc:"Hand-built mug in speckled stoneware with a soft satin glaze. Holds about 12 oz.",h:"4",w:"3.5",d:"3.5",weight:"0.8",materials:"Speckled stoneware, satin glaze",firing:"Mid fire",care:"Food safe. Dishwasher and microwave safe.",avail:"On display in Gallery Boutique",pickup:"Gallery pickup only",tags:"mug, stoneware",galleryOnly:false,multi:false,designs:[]};
+const blank = () => ({qty:"1",type:"",firing:"",avail:"",pickup:"",galleryOnly:false,multi:false,designs:[]});
+const blankDesign = () => ({name:"",price:"",qty:"1",weight:""});
+
+const KEY = "cacm-quick-list-v2";
+let state = {vendor:"", vendorOther:"", pieces:[{...EXAMPLE}]};
+try{ const s = JSON.parse(localStorage.getItem(KEY)); if(s && Array.isArray(s.pieces) && s.pieces.length) state = s; }catch(e){}
+const save = () => { try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} };
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const opts = (list, val, ph) => (ph ? `<option value="">${ph}</option>` : "") + list.map(o => `<option${o===val?" selected":""}>${esc(o)}</option>`).join("");
+const vendorName = () => (state.vendor === OTHER ? (state.vendorOther||"") : (state.vendor||"")).trim();
+
+function renderVendor(){
+  $("#vendor").innerHTML = opts(CONFIG.artists, state.vendor, "Choose your name…") + `<option value="${OTHER}"${state.vendor===OTHER?" selected":""}>My name isn't listed</option>`;
+  $("#otherWrap").hidden = state.vendor !== OTHER;
+  $("#vendorOther").value = state.vendorOther || "";
+}
+
+function designRows(p, i){
+  return p.designs.map((d,j) => `
+    <div class="design" data-j="${j}">
+      <label class="dname">Design name <span class="req">*</span><input id="dn-${i}-${j}" data-d="name" value="${esc(d.name)}" placeholder="e.g. Blue, Bee, Design 3"></label>
+      <label>Price ($) <span class="req">*</span><input id="dp-${i}-${j}" data-d="price" inputmode="decimal" value="${esc(d.price)}"></label>
+      <label>Quantity<input data-d="qty" inputmode="numeric" value="${esc(d.qty)}"></label>
+      <label>Weight (lb)<input data-d="weight" inputmode="decimal" value="${esc(d.weight)}"></label>
+      <button class="ghost" data-act="deld" type="button">Remove</button>
+    </div>`).join("");
+}
+
+function render(){
+  renderVendor();
+  $("#pieces").innerHTML = state.pieces.map((p,i) => {
+    const g = false, r = ' <span class="req">*</span>';
+    return `
+  <article class="panel" data-i="${i}">
+    <div class="piece-head">
+      <span class="num">Piece ${i+1}</span>
+      ${p.example ? '<span class="chip">Example: replace or remove</span>' : ""}
+      <h2>${esc(p.title) || "Untitled piece"}</h2>
+      <button class="ghost" data-act="dup" type="button">Duplicate</button>
+      <button class="ghost" data-act="del" type="button">Remove</button>
+    </div>
+    <div class="grid">
+      <label class="full">Title <span class="req">*</span><input id="title-${i}" data-f="title" value="${esc(p.title)}"></label>
+      ${p.multi ? "" : `<label>Price ($) <span class="req">*</span><input id="price-${i}" data-f="price" inputmode="decimal" value="${esc(p.price)}"></label>
+      <label>Quantity<input data-f="qty" inputmode="numeric" value="${esc(p.qty)}"><span class="hint">Identical copies? Just set the number.</span></label>`}
+      <label>Product type <span class="req">*</span><select id="type-${i}" data-f="type">${opts(CONFIG.types,p.type,"Choose…")}</select></label>
+    </div>
+    <div ${g?"hidden":""} style="display:grid;gap:14px">
+      <label>Description${r}<textarea id="desc-${i}" data-f="desc">${esc(p.desc)}</textarea><span class="hint">2 to 4 sentences: what it is, how you made it, what makes it special. A blank line starts a new paragraph.</span></label>
+      <div class="grid four">
+        <label>Height (in)<input data-f="h" inputmode="decimal" value="${esc(p.h)}"></label>
+        <label>Width (in)<input data-f="w" inputmode="decimal" value="${esc(p.w)}"></label>
+        <label>Depth (in)<input data-f="d" inputmode="decimal" value="${esc(p.d)}"></label>
+        ${p.multi ? "" : `<label>Weight (lb)<input data-f="weight" inputmode="decimal" value="${esc(p.weight)}"></label>`}
+      </div>
+      <div class="grid">
+        <label>Materials<input data-f="materials" value="${esc(p.materials)}" placeholder="Clay body first, then glaze"></label>
+        <label>Firing type${r}<select id="firing-${i}" data-f="firing">${opts(CONFIG.firing,p.firing,"Choose…")}</select></label>
+        <label class="full">Care${r}<input id="care-${i}" data-f="care" value="${esc(p.care)}" placeholder="e.g. Food safe, hand wash"></label>
+        <label class="half">Availability${r}<select id="avail-${i}" data-f="avail">${opts(CONFIG.availability,p.avail,"Choose…")}</select><span class="hint">Where the piece is now.</span></label>
+        <label class="half">Pickup &amp; shipping${r}<select id="pickup-${i}" data-f="pickup">${opts(CONFIG.pickup,p.pickup,"Choose…")}</select></label>
+        <label class="full">Tags <span class="hint">(optional, separate with commas)</span><input data-f="tags" value="${esc(p.tags)}"></label>
+      </div>
+    </div>
+    <label class="check"><input type="checkbox" data-f="multi"${p.multi?" checked":""}><span>This piece comes in several designs <span class="hint">e.g. ornaments or small dishes. Shoppers pick a design from a dropdown. Keep one-of-a-kind pieces as separate listings.</span></span></label>
+    ${p.multi ? `<div class="designs">${designRows(p,i)}<button class="ghost" data-act="addd" type="button" style="justify-self:start">+ Add a design</button></div>` : ""}
+  </article>`;}).join("");
+  updateStatus();
+}
+
+$("#vendor").addEventListener("change", e => { state.vendor = e.target.value; e.target.classList.remove("bad"); $("#otherWrap").hidden = state.vendor !== OTHER; save(); updateStatus(); });
+$("#vendorOther").addEventListener("input", e => { state.vendorOther = e.target.value; e.target.classList.remove("bad"); save(); });
+
+function onField(e){
+  const card = e.target.closest("[data-i]"); if(!card) return;
+  const p = state.pieces[+card.dataset.i];
+  e.target.classList.remove("bad");
+  if(p.example){ p.example = false; card.querySelector(".chip")?.remove(); }
+  const d = e.target.dataset.d;
+  if(d){ p.designs[+e.target.closest("[data-j]").dataset.j][d] = e.target.value; save(); updateStatus(); return; }
+  const f = e.target.dataset.f; if(!f) return;
+  if(e.target.type === "checkbox"){
+    p[f] = e.target.checked;
+    if(f === "multi" && p.multi && !p.designs.length) p.designs = [blankDesign(), blankDesign()];
+    save(); render(); return;
+  }
+  p[f] = e.target.value;
+  if(f === "title") card.querySelector("h2").textContent = p.title || "Untitled piece";
+  save(); updateStatus();
+}
+$("#pieces").addEventListener("input", onField);
+$("#pieces").addEventListener("change", e => { if(e.target.tagName === "SELECT" || e.target.type === "checkbox") onField(e); });
+$("#pieces").addEventListener("click", e => {
+  const act = e.target.dataset.act; if(!act) return;
+  const i = +e.target.closest("[data-i]").dataset.i, p = state.pieces[i];
+  if(act === "del") state.pieces.splice(i,1);
+  if(act === "dup") state.pieces.splice(i+1,0,{...JSON.parse(JSON.stringify(p)), example:false, title:(p.title||"") + " (copy)"});
+  if(act === "addd") p.designs.push(blankDesign());
+  if(act === "deld"){ p.designs.splice(+e.target.closest("[data-j]").dataset.j,1); if(!p.designs.length) p.multi = false; }
+  if(!state.pieces.length) state.pieces.push(blank());
+  save(); render();
+});
+$("#add").addEventListener("click", () => { state.pieces.push(blank()); save(); render(); document.getElementById("title-"+(state.pieces.length-1))?.focus(); });
+$("#clear").addEventListener("click", () => { if(!confirm("Clear all pieces from this list?")) return; state.pieces = [blank()]; save(); render(); });
+
+const used = p => (p.title||"").trim() || (p.price||"").trim() || (p.multi && p.designs.some(d => (d.name||"").trim()));
+const filled = () => state.pieces.filter(used);
+function updateStatus(msg, isErr){
+  const n = filled().length, s = $("#status");
+  s.classList.toggle("err", !!isErr);
+  s.textContent = msg || (n ? `${n} piece${n>1?"s":""} ready to go in your file.` : "Add a title and price to get started.");
+}
+
+function slug(s){ return String(s).toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,""); }
+function num(s){ const v = String(s ?? "").replace(/[^0-9.]/g,""); return v && !isNaN(+v) ? String(+v) : ""; }
+function html(desc){ return String(desc||"").trim().split(/\n\s*\n/).filter(Boolean).map(par => "<p>" + esc(par.trim()).replace(/\n/g,"<br>") + "</p>").join(""); }
+const q = v => '"' + String(v ?? "").replace(/"/g,'""') + '"';
+
+function validate(){
+  let ok = true, first = null;
+  const mark = el => { if(!el) return; el.classList.add("bad"); ok = false; first = first || el; };
+  if(!state.vendor) mark($("#vendor"));
+  if(state.vendor === OTHER && !(state.vendorOther||"").trim()) mark($("#vendorOther"));
+  state.pieces.forEach((p,i) => {
+    if(!used(p)) return;
+    const el = id => document.getElementById(id+"-"+i);
+    if(!(p.title||"").trim()) mark(el("title"));
+    if(!p.type) mark(el("type"));
+    if(p.multi){
+      p.designs.forEach((d,j) => {
+        if(!(d.name||"").trim()) mark(document.getElementById(`dn-${i}-${j}`));
+        if(!num(d.price)) mark(document.getElementById(`dp-${i}-${j}`));
+      });
+      const names = p.designs.map(d => (d.name||"").trim().toLowerCase()).filter(Boolean);
+      if(new Set(names).size !== names.length){ ok = false; updateStatus(`"${p.title || "Piece " + (i+1)}" has two designs with the same name.`, true); }
+    } else if(!num(p.price)) mark(el("price"));
+    {
+      if(!(p.desc||"").trim()) mark(el("desc"));
+      if(!p.firing) mark(el("firing"));
+      if(!(p.care||"").trim()) mark(el("care"));
+      if(!p.avail) mark(el("avail"));
+      if(!p.pickup) mark(el("pickup"));
+    }
+  });
+  if(!filled().length){ updateStatus("Add at least one piece with a title and price.", true); return false; }
+  if(state.pieces.some(p => p.example)){ updateStatus("Piece 1 is still the example. Replace it with your own piece or remove it.", true); return false; }
+  if(!ok){ if(!$("#status").classList.contains("err") || first) updateStatus("Fill in the boxes marked in red first.", true); first?.scrollIntoView({block:"center"}); first?.focus({preventScroll:true}); return false; }
+  return true;
+}
+
+function buildCSV(){
+  const vendor = vendorName(), seen = {}, out = [];
+  filled().forEach(p => {
+    let h = slug(p.title + " " + vendor) || "piece"; seen[h] = (seen[h]||0) + 1; if(seen[h] > 1) h += "-" + seen[h];
+    const g = false;
+    const tags = (p.tags||"").split(",").map(t=>t.trim()).filter(Boolean);
+    const dim = (k,v) => num(v) ? {[`Metafield: custom.${k}.value`]:num(v), [`Metafield: custom.${k}.unit`]:"in"} : {};
+    const product = {
+      "Handle":h, "Title":p.title.trim(), "Description":g ? "" : html(p.desc), "Vendor":vendor, "Type":p.type||"",
+      "Digital Product":"false", "Published":"false", "Gift Card":"false", "Tags":tags.join(", "),
+      ...(g ? {} : {...dim("dimensions",p.h), ...dim("width",p.w), ...dim("depth",p.d)}),
+      "Metafield: custom.materials":g ? "" : (p.materials||"").trim(),
+      "Metafield: custom.firing_type":g ? "" : (p.firing||""),
+      "Metafield: custom.care":g ? "" : (p.care||"").trim(),
+      "Metafield: custom.fullfillment":p.pickup||"",
+      "Metafield: custom.availability":p.avail||""
+    };
+    const variant = (name, value, price, qty, weight) => ({
+      "Handle":h, "Option1 Name":name, "Option1 Value":value, "Variant SKU":"",
+      "Variant Weight":num(weight)||"0", "Variant Weight Unit":"POUNDS", "Variant Inventory Policy":"DENY",
+      "Variant Price":num(price), "Variant Requires Shipping":"true", "Variant Taxable":"true",
+      "Track Quantity":"true", [CONFIG.location]:num(qty)||"1"
+    });
+    if(p.multi){
+      p.designs.filter(d => (d.name||"").trim()).forEach((d,k) => out.push({...(k===0?product:{}), ...variant("Design", d.name.trim(), d.price, d.qty, d.weight)}));
+    } else {
+      out.push({...product, ...variant("Title","Default Title", p.price, p.qty, p.weight)});
+    }
+  });
+  return "﻿" + [HEADERS.map(q).join(","), ...out.map(r => HEADERS.map(k => q(r[k])).join(","))].join("\r\n") + "\r\n";
+}
+
+$("#download").addEventListener("click", () => {
+  if(!validate()) return;
+  const csv = buildCSV();
+  const name = "shop-upload-" + (slug(vendorName()) || "artist") + ".csv";
+  const url = URL.createObjectURL(new Blob([csv], {type:"text/csv;charset=utf-8"}));
+  const a = document.createElement("a"); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+  updateStatus(`Saved "${name}". Now upload it in your account under Products → Import.`);
+  setTimeout(() => { if(confirm("Your file is saved. Clear your list now, so these pieces don't get uploaded twice?\n\nChoose Cancel to keep the list (for example, to fix something and download again).")){ state.pieces = [blank()]; save(); render(); updateStatus(`Saved "${name}". Now upload it in your account under Products → Import.`); } }, 600);
+});
+
+window.__buildCSV = buildCSV;
+render();
+</script>
+</body>
+</html>
