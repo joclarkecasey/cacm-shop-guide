@@ -55,9 +55,13 @@ h3 { font-family: var(--display); font-size: 26px; line-height: 1.15; margin: 0;
 .choice dt { font-weight: 700; color: var(--brand); }
 .choice dd { margin: 0; }
 @media (max-width: 760px) { .choices { grid-template-columns: 1fr; } }
+.back { display: inline-flex; align-items: center; gap: 6px; color: var(--brand); font-weight: 700; text-decoration: none; padding-block: 6px; width: fit-content; }
+.back:hover { text-decoration: underline; }
+.backbottom { margin-top: 24px; }
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Source+Sans+3:wght@400;700&display=swap">
 <div class="wrap">
+  <a class="back" href="https://gallery-rota.vercel.app/">← Back</a>
   <header>
     <span class="eyebrow">CACM Gallery &amp; Boutique</span>
     <h1>Adding your work to the CACM Shop</h1>
@@ -314,6 +318,7 @@ h3 { font-family: var(--display); font-size: 26px; line-height: 1.15; margin: 0;
     <p>You don’t need to use <b>Orders</b> or <b>Fulfillments</b> in your account. The gallery handles them.</p>
     <p>Questions? Email <b>info@cacm.studio</b>.</p>
   </div>
+  <a class="back backbottom" href="https://gallery-rota.vercel.app/">← Back</a>
 </div>
 
 </body></html>
