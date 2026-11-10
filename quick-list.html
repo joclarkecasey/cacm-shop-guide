@@ -339,6 +339,17 @@ $("#download").addEventListener("click", () => {
 
 window.__buildCSV = buildCSV;
 render();
+  /* Artist names come from the "Shop artists" tab of the Gallery Rota sheet.
+   To add an artist, add a row there. The list at the top is only a backup. */
+const ARTISTS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRRXRnWdqU2qAFcDTPIm57AWHUrmiKuU0yBsfpMkJFt0pLUSTLBJ7zxIj92kjOYOwW02gCbF3Fm9jiU/pub?gid=422086654&single=true&output=csv";
+fetch(ARTISTS_CSV, {cache: "no-store"}).then(r => r.ok ? r.text() : "").then(t => {
+  const names = t.split(/\r?\n/).slice(1).map(x => x.replace(/^"|"$/g, "").trim()).filter(Boolean);
+  if (!names.length) return;
+  CONFIG.artists = names.sort((a, b) => a.localeCompare(b));
+  const match = names.find(n => n.toLowerCase() === (state.vendor || "").toLowerCase());
+  if (match && match !== state.vendor) { state.vendor = match; save(); }
+  renderVendor();
+}).catch(() => {});
 </script>
 </body>
 </html>
